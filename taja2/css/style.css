@@ -1,0 +1,13 @@
+#httpBox {border:1px solid #cccccc;width:99%;padding:4px;}
+#httpBox .smallBox {width:99%;background-color:#f5f5f5;border:1px solid #cccccc;padding:2px;font-size:11pt;font-family:'malgun gothic';text-align:center;}
+#httpBox .ph {height:10px;font-size:0px;margin-top:7px;}
+#httpBox .textbox {width:99%;border:0px;background-color:#f5f5f5;text-align:center;}
+#httpBox #status {width:99%;}
+#httpBox #status th{font-size:10pt;}
+#httpBox #status .bar {width:0px;font-size:0px;height:18px;}
+#httpBox #status .nums {font-size:9pt;height:18px; padding:15px 0 0 15px;}
+#httpBox #status .barBgcolor {background-color:#cccccc }
+.top-summary {margin-bottom:20px; line-height:160%;}
+.top-summary h2 {margin-bottom:5px; font-size:14px; color:#444;}
+.top-summary div.content {padding:15px; font-size:12px; color:#666; border:1px solid #e5e5e5; background:#f5f5f5;}
+.top-summary div.content ul {padding:0 0 0 15px; list-style-type:circle;}
