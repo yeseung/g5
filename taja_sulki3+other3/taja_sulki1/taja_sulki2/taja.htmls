@@ -1,0 +1,244 @@
+<?
+$_POST['cha_evr'];
+$_POST['cha_best'];
+$_POST['cha_sum'];
+$_POST['tries'];
+$_POST['row'];
+$_POST['res'];
+$_POST['pass'];
+$_POST['d'];
+$_POST['q'];
+
+$_GET['cha_evr'];
+$_GET['cha_best'];
+$_GET['cha_sum'];
+$_GET['tries'];
+$_GET['row'];
+$_GET['res'];
+$_GET['pass'];
+$_GET['d'];
+$_GET['q'];
+
+ob_start();
+session_start();
+$_SESSION['cha_evr'];
+$_SESSION['cha_best'];
+$_SESSION['cha_sum'];
+$_SESSION['tries'];
+$_SESSION['row'];
+$_SESSION['res'];
+$_SESSION['pass'];
+$_SESSION['d'];
+$_SESSION['q'];
+$z=$d;
+echo("<a href=taja.html?$PHP_SELF><img src=\"./taja.gif\" border=\"0\"></a><br>");
+echo("$d ");
+$dat=file("say.log");
+srand((double)microtime()*1000000);
+$end=sizeof($dat);
+$randval=rand(1,$end);
+$d=$dat[$randval];
+$d=trim($d);
+$d=explode(".",$d);
+$d=$d[0];
+echo("행: $randval <h4>$d</h4> ");
+?>
+<HTML>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<TITLE>슬기 타자</TITLE>
+<script language="javascript">
+<!--
+	function focusIt() {
+		document.sulki.message.focus();
+		return true;
+	}
+//-->
+</script>
+
+<style type="text/css">
+<!--
+BODY, TR, TH, TD {
+ font-size : 10pt;
+}
+</style>
+</HEAD>
+<BODY BGCOLOR="#33ffcc" onload="focusIt()">
+<? echo("<form method=post action=taja.html?$PHP_SELF?name=sulki>"); ?> 
+<input type=text size=80 name=message>
+<a href="./taja.htmls">소스보기</a> <? echo("<a href=taja.html?die=1>그만두기</a>");?>
+</form>
+</body>
+</html> -->
+<?
+if ($die=1) {
+	if($q>3000) {
+	echo("<form method=post action=taja.html?$PHP_SELF>");
+	echo("이름<input type=text size=10 name=irum>");
+	echo("<input type=hidden name=add value=1>");
+	echo("<input type=hidden name=q value=$q>");
+	echo("<input type=submit value=등록>");
+	echo("<input type=hidden name=cha_evr value=$cha_evr>");
+	echo("<input type=hidden name=cha_best value=$cha_best>");
+	echo("</form>");
+	}
+	else if($q<3000) { echo("수고하셨습니다. 당시의 점수는 $q <a href=./taja.html?$PHP_SELF>돌아가기</a>"); }
+	session_destroy();
+	exit;
+}
+if ($pass>8) {
+	echo("게임오버 당신의 점수는 $q");
+	session_destroy();
+	exit;
+}
+if ($irum) {
+$day=date(y);
+$mon=date(m);
+$d=date(d);
+$a=date(a);
+if ($a=='am') {
+$a=오전;
+}
+else
+$a=오후;
+$h=date(h);
+$c=date(i);
+	$fw=fopen("taja.dat","a");
+	if($q<10000) {
+	$g='1';
+	}
+	if($q>10000) {
+	$g='2';
+	}
+	fwrite($fw,"\r\n<tr><td>${g}</td><td>${q}</td><td>$cha_evr</td><td>$cha_best</td><td> ${irum}</td><td>");
+	fwrite($fw,"$day $mon $d $a ${h}시 ${c}분</td><td></tr>");
+	session_destroy();
+	echo("저장되었습니다. <a href=taja.html?$PHP_SELF>돌아가기</a>");
+	exit;
+
+}
+if(!$res) {
+	$res=mktime();
+}
+else if($res) {
+	$res2=mktime();
+	$cha=$res2-$res;
+echo("시간1: $res, 시간2: $res2");
+	$res=$res2;
+}
+
+echo(" 시간차는 $cha<p>");
+if($q) {
+$tries++;
+}
+if($message) {
+$pass=0;
+$message=stripslashes($message);
+
+$e1=explode(" ",$z);
+$e2=explode(" ",$message);
+$l=sizeof($e1);
+$l2=sizeof($e2);
+for($i=0;$i<$l;$i++) {
+	$i2=$i-1;
+	echo("<br>$i:$e1[$i] -> $i:$e2[$i] ");
+
+	if($e1[$i]==$e2[$i]) {
+	$m++;
+	echo("ok");
+	}
+}
+echo("<p>");
+$p=$m/$l*100;
+$p=floor($p);
+}
+if($p=='100') {
+$p+=50;
+$row++;
+	if($row>1) {
+	$c=$row*50;
+		echo("<b>$row hit 콤보</b> 콤보점수:$c ");
+		$p+=50;
+	}
+}
+else if($p!='100') {
+$row=0;
+}
+if(!$message) {
+	$p=$p-10;
+	$row=0;
+	$pass++;
+
+	if($tries<1) {
+		echo("3000점이상 하이스코어 리스트");
+		if($view=='date') {
+			echo(" <a href=$PHP_SELF?view=null>성적순</a><p>");
+			$data=file("taja.dat","r");
+			echo("<table><tr><td>등급</td><td>점수</td><td>평타</td><td>최고타</td><td>이름</td><td>날짜</td></tr>");
+			for($j=0;$j<sizeof($data);$j++) {
+				echo $data[$j];
+			}
+			echo("</table>");
+		}
+		else if($view!='date') {
+			echo(" <a href=$PHP_SELF?view=date>날짜순</a><p>");
+			$data=file("taja.dat","r");
+			rsort($data);
+			echo("<table><tr><td>등급</td><td>점수</td><td>평타</td><td>최고타</td><td>이름</td><td>날짜</td></tr>");
+			for($j=0;$j<sizeof($data);$j++) {
+				echo $data[$j];
+			}
+			echo("</table>");
+		}
+	exit;
+	}
+}
+if($cha<1) {
+$cha=1;
+}
+$r=$p/$cha*20;
+//짧은글 보상루틴
+
+$cha=4000/$cha;
+if($l<2) {
+$l=5;
+}
+$cha=$cha*($l2/$l);
+//echo("l:$l l2:$l2");
+if(!$message) {
+	$cha=1;
+}
+$cha=floor($cha);
+//긴글보상루틴
+//$cha=$cha+($l2*15);
+//평타계산루틴
+$cha_sum+=$cha;
+if($tries<1) {
+	$tries=1;
+}
+if(!cha_sum) {
+	$cha_sum=$cha;
+}
+if($tries>=1) {
+	$cha_evr=$cha_sum/$tries;
+}
+if($tries<1) {
+	$cha_evr=$cha;
+}
+$cha_evr=floor($cha_evr);
+//최고타계산루틴
+	if(!$cha_best) {
+		$cha_best=$cha_evr;
+	}
+	if($cha_best<$cha) {
+		$cha_best=$cha;
+	}
+
+$r=floor($r);
+$q+=$r;
+if($p>100) {
+$p=100;
+}
+echo("속도:${cha}타 평타:${cha_evr} 최고타:${cha_best} 정확도:$p% 점수:${r}점 총점: $q <br> 시도: $tries 포기: $pass<p>문장:$z<br>입력:$message $p%");
+exit;
+?>
