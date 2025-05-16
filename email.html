@@ -1,50 +1,79 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>메일 입력</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <style>
-    textarea {
-      width: 400px;
-      height: 100px;
-    }
-    #output {
-      margin-top: 20px;
-      white-space: pre-line;
-      font-family: monospace;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>메일 입력</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        textarea {
+            width: 400px;
+            height: 100px;
+        }
+
+        #output {
+            margin-top: 20px;
+            white-space: pre-line;
+            font-family: monospace;
+        }
+    </style>
 </head>
 <body>
 
-  <h1>메일 입력</h1>
-  <textarea id="email" placeholder="여러 이메일을 쉼표로 구분하여 입력하세요."></textarea><br>
-  <button id="generate">SQL 생성</button>
+<h1>메일 입력</h1>
+<div style="padding-bottom:20px">
+    <textarea id="email" placeholder="여러 이메일을 쉼표로 구분하여 입력하세요."></textarea><br>
+    <button id="generate">SQL 생성</button>
+</div>
 
-  <div id="output"></div>
 
-  <script>
-    $(document).ready(function() {
-      $('#generate').click(function() {
-        const input = $('#email').val();
-        const emails = input.split(',').map(e => e.trim()).filter(e => e.length > 0);
-        let output = '';
+<div style="padding-bottom:20px">
+    <textarea id="email1" placeholder="이메일을 한 줄씩 입력하세요."></textarea><br>
+    <button id="convert">SQL 생성</button>
+</div>
+<div id="output"></div>
 
-        emails.forEach(function(email) {
-          // 이메일 형식 검증
-          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (emailPattern.test(email)) {
-            output += `INSERT INTO email (em_email, em_datetime) VALUES ('${email}', NOW());\n`;
-          } else {
-            output += `❌ 잘못된 이메일 형식: ${email}\n`;
-          }
+<script>
+    $(document).ready(function () {
+        
+        $('#generate').click(function () {
+            const input = $('#email').val();
+            const emails = input.split(',').map(e => e.trim()).filter(e => e.length > 0);
+            let output = '';
+
+            emails.forEach(function (email) {
+                // 이메일 형식 검증
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailPattern.test(email)) {
+                    output += `INSERT INTO email (em_email, em_datetime)
+                               VALUES ('${email}', NOW());  `;
+                } else {
+                    output += `❌ 잘못된 이메일 형식: ${email}\n`;
+                }
+            });
+
+            $('#output').text(output);
         });
 
-        $('#output').text(output);
-      });
+        $('#convert').click(function () {
+            const input = $('#email1').val();
+            const emails = input.split('\n').map(e => e.trim()).filter(e => e.length > 0);
+            let output = '';
+
+            emails.forEach(function (email) {
+                // 이메일 유효성 검증
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailPattern.test(email)) {
+                    output += `INSERT INTO email (em_email, em_datetime)
+                               VALUES ('${email}', NOW());  `;
+                } else {
+                    output += `❌ 잘못된 이메일 형식: ${email}\n`;
+                }
+            });
+
+            $('#output').text(output);
+        });
     });
-  </script>
+</script>
 
 </body>
 </html>
